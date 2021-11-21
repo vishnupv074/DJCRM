@@ -1,0 +1,2 @@
+# DJCRM
+Django CRM
