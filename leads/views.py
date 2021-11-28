@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
-from django.http import HttpResponse
 from .models import Agent, Lead
 from .forms import LeadForm, LeadModelForm
 from django.views.generic import (
@@ -11,6 +10,7 @@ from django.views.generic import (
     DeleteView
 )
 from django.urls import reverse_lazy
+from django.core.mail import send_mail
 
 #####
 class LandingPageView(TemplateView):
@@ -77,6 +77,15 @@ class LeadCreateView(CreateView):
     template_name = 'leads/lead_create.html'
     form_class = LeadModelForm
     success_url = reverse_lazy('leads:leads_list')
+
+    def form_valid(self, form):
+        send_mail(
+            subject="A lead has been created",
+            message="Go to the site to see the new lead",
+            from_email="test@test.com",
+            recipient_list=["test2@test.com"],
+        )
+        return super(LeadCreateView, self).form_valid(form)
 
     # def get_success_url(self) -> str:
     #     return reverse('leads:leads_list')
