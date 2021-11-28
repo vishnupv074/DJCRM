@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from .models import Agent, Lead
-from .forms import LeadForm, LeadModelForm
+from .forms import LeadForm, LeadModelForm, CustomUserCreationForm
 from django.views.generic import (
     TemplateView,
     ListView,
@@ -11,6 +11,16 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
+
+
+# Signup View
+class SignupView(CreateView):
+    """ Custom UserCreation form is used to specify the user model created.
+    Else it will try to use the default User model with is not in use. """
+    template_name = "registration/signup.html"
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('login')
+
 
 #####
 class LandingPageView(TemplateView):
