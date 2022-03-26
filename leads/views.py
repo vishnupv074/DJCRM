@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from .models import Agent, Lead
 from .forms import LeadForm, LeadModelForm, CustomUserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (
     TemplateView,
     ListView,
@@ -36,7 +37,7 @@ def landing_page(request):
 #####
 
 #####
-class LeadListView(ListView):
+class LeadListView(LoginRequiredMixin, ListView):
     model = Lead
     # queryset = Lead.objects.all()
     context_object_name = 'leads'
@@ -51,7 +52,7 @@ def lead_list(request):
 #####
 
 #####
-class LeadDetailView(DetailView):
+class LeadDetailView(LoginRequiredMixin, DetailView):
     template_name = 'leads/leads_details.html'
     # queryset = Lead.objects.all()
     model = Lead
@@ -87,7 +88,7 @@ def lead_create(request):
     return render(request, 'leads/lead_create.html', context)
 """
 
-class LeadCreateView(CreateView):
+class LeadCreateView(LoginRequiredMixin, CreateView):
     template_name = 'leads/lead_create.html'
     form_class = LeadModelForm
     success_url = reverse_lazy('leads:leads_list')
@@ -119,7 +120,7 @@ def lead_create(request):
 #####
 
 #####
-class LeadUpdateview(UpdateView):
+class LeadUpdateview(LoginRequiredMixin, UpdateView):
     template_name = 'leads/leads_update.html'
     form_class = LeadModelForm
     model = Lead
@@ -144,7 +145,7 @@ def lead_update(request, pk):
 #####
 
 #####
-class LeadDeleteView(DeleteView):
+class LeadDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'leads/lead_delete.html'  # This template is needed for confirmation
     model = Lead
     success_url = reverse_lazy('leads:leads_list')
